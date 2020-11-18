@@ -11,7 +11,7 @@ function startDatabaseConnection() {
       log.info('Connected successfully to database');
     })
     .catch((err) => {
-      log.error('Could not connected to database:', err);
+      log.error(`Could not connected to database: ${err.message}`);
     });
 }
 

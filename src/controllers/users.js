@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const security = require('../security');
+const { security } = require('../utils');
 const {
   logger,
   errors: { BadRequestError, NotFoundError },
@@ -26,6 +26,7 @@ router.post('/signup', UsersValidator.createUser, async (req, res, next) => {
 
 router.post('/signin', async (req, res, next) => {
   const { email, password } = req.body;
+  log.debug('Signin', { email });
   const user = await UserService.findByEmail(email);
 
   if (!user) return next(new NotFoundError('Invalid credentials'));

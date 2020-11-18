@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const { JWT_PRIVATE_KEY } = require('../config');
-const { logger } = require('../utils');
+const logger = require('./logger');
 
 const log = logger('Security');
 const ROUNDS = 12;
