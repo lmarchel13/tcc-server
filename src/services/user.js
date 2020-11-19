@@ -1,6 +1,6 @@
-const { logger } = require('../utils');
-const { User } = require('../models');
-const log = logger('Users Service');
+const { logger } = require("../utils");
+const { User } = require("../models");
+const log = logger("User Service");
 
 module.exports = {
   findByEmail: async (email) => {

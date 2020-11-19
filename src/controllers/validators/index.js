@@ -1,5 +1,7 @@
-const UsersValidator = require('./users');
+const UserValidator = require("./users");
+const CompanyValidator = require("./company");
 
 module.exports = {
-  UsersValidator,
+  UserValidator,
+  CompanyValidator,
 };
