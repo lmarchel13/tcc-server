@@ -1,22 +1,19 @@
-const chalk = require('chalk');
-const { createLogger, format, transports } = require('winston');
-
-const { combine, timestamp, label, printf } = format;
+const chalk = require("chalk");
 
 const colors = {
-  info: 'green',
-  warn: 'yellow',
-  error: 'red',
-  debug: 'blue',
+  info: "green",
+  warn: "yellow",
+  error: "red",
+  debug: "blue",
 };
 
-module.exports = (instanceName) => {
-  const customFormat = printf(
-    ({ level, message, label, timestamp }) => `${timestamp} - [${label}] ${chalk[colors[level]](level)}: ${message}`,
-  );
+const levels = ["info", "debug", "warn", "error"];
 
-  return createLogger({
-    format: combine(label({ label: instanceName }), timestamp(), customFormat, format.colorize()),
-    transports: [new transports.Console()],
+module.exports = (instanceName) => {
+  const logger = {};
+  levels.forEach((level) => {
+    logger[level] = (msg, ...metadata) =>
+      console.log(`${new Date().toUTCString()} - [${instanceName}] ${chalk[colors[level]](level)}:`, msg, ...metadata);
   });
+  return logger;
 };
