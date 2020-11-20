@@ -3,6 +3,8 @@ const Company = require("./Company");
 const Service = require("./Service");
 const Category = require("./Category");
 const Plan = require("./Plan");
+const Transaction = require("./Transaction");
+const PaymentMethod = require("./PaymentMethod");
 
 module.exports = {
   User,
@@ -10,4 +12,6 @@ module.exports = {
   Service,
   Category,
   Plan,
+  Transaction,
+  PaymentMethod,
 };

@@ -6,6 +6,7 @@ const ServiceController = require("./service");
 const CategoryController = require("./category");
 const OfferController = require("./offer");
 const PlanController = require("./plan");
+const TransactionController = require("./transaction");
 
 const router = Router();
 
@@ -15,5 +16,6 @@ router.use("/services", ServiceController);
 router.use("/categories", CategoryController);
 router.use("/offers", OfferController);
 router.use("/plans", PlanController);
+router.use("/transactions", TransactionController);
 
 module.exports = router;

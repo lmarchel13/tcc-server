@@ -16,6 +16,10 @@ const getCompanyById = async (id) => {
   return company;
 };
 
+const getUserCompanies = async (userId) => {
+  return Company.find({ userId });
+};
+
 const createCompany = async (payload) => {
   const company = new Company(payload);
   await company.save();
@@ -38,4 +42,5 @@ module.exports = {
   updateCompany,
   createCompany,
   deleteCompany,
+  getUserCompanies,
 };

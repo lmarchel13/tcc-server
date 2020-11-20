@@ -1,9 +1,14 @@
 const { Schema, model } = require("mongoose");
 
-const name = "Category";
+const name = "PaymentMethod";
 const schema = new Schema(
   {
     name: "string",
+    company: {
+      type: Schema.Types.ObjectId,
+      ref: "Company",
+      required: true,
+    },
   },
   {
     toJSON: {
