@@ -1,13 +1,18 @@
-const { startDatabaseConnection } = require("./database");
 const express = require("express");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
+
+const { startDatabaseConnection } = require("./database");
 const controllers = require("./controllers");
 
-startDatabaseConnection();
 const app = express();
 
+startDatabaseConnection();
+
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
+
 app.use(controllers);
 
 app.use(function (err, req, res, next) {
