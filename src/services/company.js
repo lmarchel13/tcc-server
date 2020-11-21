@@ -1,7 +1,7 @@
 const {
   errors: { NotFoundError },
 } = require("../utils");
-const { Company } = require("../models");
+const { Company, User } = require("../models");
 
 const find = ({ limit, offset }) => {
   return Company.find()
@@ -17,7 +17,7 @@ const getCompanyById = async (id) => {
 };
 
 const getUserCompanies = async (userId) => {
-  return Company.find({ userId });
+  return Company.find({ user: userId }).populate("plan", "id name value").populate("services");
 };
 
 const createCompany = async (payload) => {

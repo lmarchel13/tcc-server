@@ -1,0 +1,38 @@
+[
+    {
+        "name": "Veículos",
+        "icon": "DirectionsCar"
+    },
+    {
+        "name": "Tecnologia",
+        "icon": "ImportantDevices"
+    },
+    {
+        "name": "Casa e Eletrodomésticos",
+        "icon": "Home"
+    },
+    {
+        "name": "Esporte e Lazer",
+        "icon": "SportsSoccer"
+    },
+    {
+        "name": "Reparos",
+        "icon": "Build"
+    },
+    {
+        "name": "Estética",
+        "icon": "Face"
+    },
+    {
+        "name": "Saúde",
+        "icon": "Favorite"
+    },
+    {
+        "name": "Educação",
+        "icon": "LocalLibrary"
+    },
+    {
+        "name": "Outros",
+        "icon": "Announcement"
+    }
+]

@@ -4,10 +4,12 @@ const { omit } = require("lodash");
 const name = "User";
 const schema = new Schema(
   {
-    name: "string",
+    firstName: "string",
+    lastName: "string",
     email: "string",
     hashedPassword: "string",
     salt: "string",
+    companies: [{ type: Schema.Types.ObjectId, ref: "Company" }],
   },
   {
     toJSON: {

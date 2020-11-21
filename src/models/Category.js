@@ -4,6 +4,7 @@ const name = "Category";
 const schema = new Schema(
   {
     name: "string",
+    icon: "string",
   },
   {
     toJSON: {

@@ -1,7 +1,7 @@
 const { Plan } = require("../models");
 
 const find = async () => {
-  return Plan.find();
+  return Plan.find().sort("value");
 };
 
 const createPlan = async (payload) => {

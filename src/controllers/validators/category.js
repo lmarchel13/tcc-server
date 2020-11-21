@@ -6,6 +6,7 @@ const {
 const schemas = {
   createCategory: Joi.object({
     name: Joi.string().required(),
+    icon: Joi.string().required(),
   }),
 };
 

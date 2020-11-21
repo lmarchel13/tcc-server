@@ -11,7 +11,8 @@ const log = logger("Users Controller");
 const router = Router();
 
 router.post("/signup", UserValidator.createUser, async (req, res, next) => {
-  const { name, email, password } = req.body;
+  const { firstName, lastName, email, password } = req.body;
+
   const salt = security.generateSalt();
   const { hashedPassword } = await security.generatePassword(password, salt);
 
@@ -19,7 +20,7 @@ router.post("/signup", UserValidator.createUser, async (req, res, next) => {
 
   if (await UserService.findByEmail(email)) return next(new BadRequestError("Email already in use"));
 
-  const user = await UserService.createUser({ name, email, salt, hashedPassword });
+  const user = await UserService.createUser({ firstName, lastName, email, salt, hashedPassword });
 
   return res.status(201).send({ id: user._id });
 });

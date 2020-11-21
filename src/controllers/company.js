@@ -15,6 +15,20 @@ const { BadRequestError, UnauthorizedError } = require("../utils/errors");
 const router = Router();
 const log = logger("Company Controller");
 
+router.get("/my-companies", validateToken, getUserFromToken, async (req, res, next) => {
+  log.info("Loading my companies", { userId: req.userId });
+  try {
+    const companies = await CompanyService.getUserCompanies(req.userId);
+
+    log.info("Company founds", { count: companies.length });
+
+    return res.send(companies);
+  } catch (error) {
+    log.error("Could not load my company", { error });
+    next(error);
+  }
+});
+
 router.post("/", validateToken, getUserFromToken, CompanyValidator.createCompany, async (req, res, next) => {
   const payload = {
     ...req.body,

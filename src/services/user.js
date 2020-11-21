@@ -8,8 +8,8 @@ const findByEmail = async (email) => {
   return user;
 };
 const createUser = async (payload) => {
-  const { name, email, salt, hashedPassword } = payload;
-  const user = new User({ name, email, salt, hashedPassword });
+  const { firstName, lastName, email, salt, hashedPassword } = payload;
+  const user = new User({ firstName, lastName, email, salt, hashedPassword });
 
   await user.save();
   return user;

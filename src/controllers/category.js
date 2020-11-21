@@ -1,13 +1,23 @@
 const { Router } = require("express");
 const { ServiceService, CategoryService } = require("../services");
+const { logger } = require("../utils");
 
 const router = Router();
 
+const log = logger("Category Controller");
+
 router.get("/", async (req, res) => {
   const { limit, offset } = req.query;
-  const categories = await CategoryService.find({ limit, offset });
+  log.info("Get categories", { limit, offset });
 
-  return res.send(categories);
+  try {
+    const categories = await CategoryService.find({ limit, offset });
+
+    return res.send(categories);
+  } catch (error) {
+    log.error("Could not get categories", { error });
+    next(error);
+  }
 });
 
 router.post("/", async (req, res, next) => {
