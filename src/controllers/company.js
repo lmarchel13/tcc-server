@@ -75,14 +75,15 @@ router.patch("/:id", validateToken, getUserFromToken, CompanyValidator.patchComp
   try {
     const company = await CompanyService.getCompanyById(id);
 
-    if (company.userId !== userId) {
+    if (company.user.id !== userId) {
       log.error("Company does not belong to the user", { companyId: id, userId });
       throw new UnauthorizedError("Company does not belong to the user");
     }
 
-    await CompanyService.updateCompany(id, userId, req.body);
+    await CompanyService.updateCompany(id, req.body);
+    const updatedCompany = await CompanyService.getCompanyById(id);
 
-    return res.send(company);
+    return res.send(updatedCompany);
   } catch (error) {
     log.error("Could not update company", { id, error });
 
@@ -99,10 +100,12 @@ router.delete("/:id", validateToken, getUserFromToken, async (req, res, next) =>
   try {
     const company = await CompanyService.getCompanyById(id);
 
-    if (company.userId !== userId) {
+    if (company.user.id !== userId) {
       log.error("Company does not belong to the user", { companyId: id, userId });
       throw new UnauthorizedError("Company does not belong to the user");
     }
+
+    // TODO: Delete services from company
 
     await CompanyService.deleteCompany(id, req.body);
 

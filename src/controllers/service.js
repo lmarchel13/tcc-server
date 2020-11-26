@@ -13,7 +13,9 @@ router.get("/:id", async (req, res, next) => {
   const { id } = req.params;
 
   try {
+    log.info(`Get service by id (${id})`);
     const service = await ServiceService.getById(id);
+
     return res.send(service);
   } catch (error) {
     log.error("Could not find service", { id, error });
@@ -29,11 +31,7 @@ router.delete("/:id", validateToken, getUserFromToken, async (req, res, next) =>
       company: { id: companyId },
     } = await ServiceService.getById(id);
 
-    console.log("companyId :>> ", companyId);
-
     const company = await CompanyService.getCompanyById(companyId);
-
-    console.log("company user:>> ", company.user);
 
     if (req.userId !== company.userId) throw new UnauthorizedError("Service does not belong to company");
 

@@ -12,7 +12,7 @@ const getById = async (id) => {
   return service;
 };
 const getByCompanyId = async (companyId) => {
-  return Service.find({ companyId });
+  return Service.find({ company: { _id: companyId } }).populate("category");
 };
 const createService = async (payload) => {
   return Service.create(payload);

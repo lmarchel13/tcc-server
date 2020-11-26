@@ -13,7 +13,10 @@ router.get("/", async (req, res) => {
   try {
     const categories = await CategoryService.find({ limit, offset });
 
-    return res.send(categories);
+    const lastService = categories.find((category) => category.name === "Outros");
+    const other = categories.filter((category) => category.name !== "Outros");
+
+    return res.send([...other, lastService]);
   } catch (error) {
     log.error("Could not get categories", { error });
     next(error);

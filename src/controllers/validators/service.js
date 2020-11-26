@@ -9,7 +9,7 @@ const schemas = {
     description: Joi.string(),
     categoryId: Joi.string().required(),
     duration: Joi.string(),
-    type: Joi.number().required(),
+    type: Joi.string().required(),
     value: Joi.number().min(0).required(),
   }),
   patchService: Joi.object({
@@ -17,7 +17,7 @@ const schemas = {
     description: Joi.string(),
     categoryId: Joi.string(),
     duration: Joi.string(),
-    type: Joi.number(),
+    type: Joi.string(),
     value: Joi.number().min(0),
   }),
 };
