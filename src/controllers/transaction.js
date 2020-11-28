@@ -41,4 +41,17 @@ router.delete("/:id", validateToken, getUserFromToken, async (req, res) => {
   }
 });
 
+router.get("/", async (req, res) => {
+  const { serviceId, day } = req.query;
+
+  try {
+    const transactions = await TransactionService.getTransactions({ serviceId, day });
+
+    return res.send(transactions);
+  } catch (error) {
+    log.error("Could not load transactions", { ...req.query, error });
+    next(error);
+  }
+});
+
 module.exports = router;

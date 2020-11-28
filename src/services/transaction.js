@@ -28,9 +28,28 @@ const deleteTransaction = async ({ userId, id }) => {
   return Transaction.findOneAndDelete({ sellerId: userId, _id: id });
 };
 
+const validateTransaction = async (serviceId, day, time) => {
+  const transaction = await Transaction.findOne({ service: { _id: serviceId }, day, time });
+
+  console.log("transaction", transaction);
+
+  return !!transaction;
+};
+
+const getTransactions = async ({ serviceId, day }) => {
+  let options = {};
+
+  if (serviceId) options.service = { _id: serviceId };
+  if (day) options.day = day;
+
+  return Transaction.find(options);
+};
+
 module.exports = {
   getBuyerTransactions,
   getSellerTransactions,
   getCompanyTransactions,
   deleteTransaction,
+  validateTransaction,
+  getTransactions,
 };

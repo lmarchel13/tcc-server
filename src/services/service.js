@@ -32,15 +32,18 @@ const getLastOffers = async (limit = 20) => {
 };
 
 const search = async (name = "", { limit, offset }) => {
-  return Service.find({ name: { $regex: name } })
+  return Service.find({ name: { $regex: new RegExp(name, "i") } })
     .populate("company", "id name plan", null, { populate: { path: "plan" } })
-    .sort("-company plan value");
+    .sort("-company plan value")
+    .limit(+limit)
+    .skip(+offset);
 };
 
 const getByCategoryId = async (categoryId, { limit, offset }) => {
-  return Service.find({ categoryId })
+  return Service.find({ category: { _id: categoryId } })
     .limit(+limit)
-    .skip(+offset);
+    .skip(+offset)
+    .populate("company");
 };
 
 module.exports = {

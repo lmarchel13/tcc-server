@@ -48,8 +48,8 @@ router.post("/", validateToken, getUserFromToken, CompanyValidator.createCompany
 });
 
 router.get("/", async (req, res, next) => {
-  const { limit = 20, offset = 0 } = req.query;
-  const companies = await CompanyService.find({ limit, offset });
+  const { limit = 20, offset = 0, term = "" } = req.query;
+  const companies = await CompanyService.find({ limit, offset, term });
 
   return res.status(200).send(companies);
 });

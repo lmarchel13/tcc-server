@@ -1,12 +1,13 @@
 const {
   errors: { NotFoundError },
 } = require("../utils");
-const { Company, User } = require("../models");
+const { Company } = require("../models");
 
-const find = ({ limit, offset }) => {
-  return Company.find()
+const find = ({ limit, offset, term }) => {
+  return Company.find({ name: { $regex: new RegExp(term, "i") } })
     .limit(+limit)
-    .skip(+offset);
+    .skip(+offset)
+    .populate("plan");
 };
 
 const getCompanyById = async (id) => {

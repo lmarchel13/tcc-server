@@ -16,6 +16,8 @@ const schema = new Schema(
       ref: "Service",
     },
     value: "number",
+    time: "string",
+    day: "string",
   },
   {
     timestamps: true,
