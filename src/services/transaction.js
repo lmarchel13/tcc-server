@@ -2,12 +2,14 @@ const { Transaction } = require("../models");
 const CompanyService = require("./company");
 
 const getBuyerTransactions = async (buyerId, { limit = 20, offset = 0 }) => {
-  return Transaction.find({ buyer: { _id: buyerId } })
+  const transactions = await Transaction.find({ buyer: { _id: buyerId } })
     .populate("seller")
     .populate("buyer")
     .populate("service")
     .limit(+limit)
     .skip(+offset);
+
+  return transactions;
 };
 
 const getSellerTransactions = async (sellerId, { limit = 20, offset = 0 }) => {

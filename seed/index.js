@@ -9,11 +9,11 @@ const models = require("../src/models");
 const CATEGORIES = require("./categories.json");
 const PLANS = require("./plans.json");
 const SERVICES_BY_CATEGORY = require("./services.json");
+const BRAZILIANS_STATES = require("./states");
 
 const BASE_URL = "http://localhost:8000";
 const DEFAULT_PASSWORD = "123456";
-const NUMBER_OF_USERS = 20;
-const NUMBER_OF_COMPANIES = 60;
+const NUMBER_OF_USERS = 10;
 const DAYS_OPEN = ["0", "1", "2", "3", "4", "5", "6"];
 
 faker.locale = "pt_BR";
@@ -21,7 +21,7 @@ faker.locale = "pt_BR";
 const log = logger("Seed");
 
 const chooseBetweenTwo = (a, b) => {
-  return Math.random() > 0.5 ? a : b;
+  return Math.random() * 10 > 5 ? a : b;
 };
 
 const chooseBetweenThree = (data) => {
@@ -104,8 +104,10 @@ const createCompany = async (plans, token) => {
   const openDays = [];
   const plan = chooseBetweenThree(plans);
 
+  const address = `Rua ${faker.name.firstName()} ${faker.name.lastName()}, ${Math.floor(Math.random() * 1000)}`;
+
   DAYS_OPEN.forEach((day) => {
-    if (Math.random() > 0.5) openDays.push(day);
+    if (Math.random() > 0.2) openDays.push(day);
   });
 
   const payload = {
@@ -113,15 +115,15 @@ const createCompany = async (plans, token) => {
     description: `Empresa com mais de ${Math.floor(Math.random() * 50)} anos de história`,
     email,
     phone: faker.phone.phoneNumber(),
-    address: faker.address.streetAddress(),
-    city: faker.address.city(),
-    state: faker.address.state(),
+    address,
+    city: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    state: faker.address.stateAbbr(),
     postcode: faker.address.zipCode(),
     documentType,
     document: `${faker.random.number(999999999999)}`,
-    startTime: "08:00",
-    endTime: "17:00",
-    openDays,
+    startTime: chooseRandomFromArray(["08:00", "09:00", "10:00"]),
+    endTime: chooseRandomFromArray(["17:00", "18:00", "19:00"]),
+    openDays: openDays.length > 0 ? openDays : ["1", "2", "3"],
     plan: plan.id,
   };
 
@@ -179,11 +181,35 @@ const clearDatabase = async () => {
   }
 };
 
+const startProcess = async (categories, plans) => {
+  const user = await createUser();
+  user.loginResponse = await login(user.email, user.password);
+
+  let companyCounter = 0;
+  const numOfCompanies = chooseRandomFromArray([1, 2, 3, 4, 5]);
+  log.info(`Creating ${numOfCompanies} companies for user ${user.loginResponse.userId}`);
+
+  while (companyCounter < numOfCompanies) {
+    let servicesCounter = 0;
+    const numOfServices = chooseBetweenThree([1, 2, 3, 4, 5]);
+
+    const company = await createCompany(plans, user.loginResponse.jwt);
+    const category = chooseRandomFromArray(categories);
+
+    while (servicesCounter < numOfServices) {
+      const service = await createService(company, category, user.loginResponse.jwt);
+
+      company.services.push(service);
+
+      servicesCounter++;
+    }
+
+    companyCounter++;
+  }
+};
+
 const run = async () => {
   await clearDatabase();
-
-  const users = [];
-  const companies = [];
 
   const categories = await createCategories();
   log.info("Categories added successfully");
@@ -192,47 +218,18 @@ const run = async () => {
   log.info("Plans added successfully");
 
   try {
-    while (users.length < NUMBER_OF_USERS) {
-      const user = await createUser();
-
-      user.loginResponse = await login(user.email, user.password);
-      users.push(user);
-
-      while (companies.length < NUMBER_OF_COMPANIES) {
-        let companyCounter = 0;
-
-        const numOfCompanies = chooseBetweenThree([1, 2, 3]);
-
-        log.info(`Creating ${numOfCompanies} companies for user ${user.loginResponse.userId}`);
-
-        while (companyCounter < numOfCompanies) {
-          let servicesCounter = 0;
-          const numOfServices = chooseBetweenThree([1, 3, 5]);
-          0;
-
-          const company = await createCompany(plans, user.loginResponse.jwt);
-          const category = chooseRandomFromArray(categories);
-
-          company.services = [];
-
-          while (servicesCounter < numOfServices) {
-            const service = await createService(company, category, user.loginResponse.jwt);
-
-            company.services.push(service);
-
-            servicesCounter++;
-          }
-
-          companies.push(company);
-          companyCounter++;
-        }
-      }
-    }
+    console.time("PROCESS");
+    await Promise.all(
+      new Array(NUMBER_OF_USERS).fill(0).map(async () => {
+        return startProcess(categories, plans);
+      }),
+    );
+    console.timeEnd("PROCESS");
   } catch (error) {
     log.error("Error:", error.message);
   }
 
-  process.exit(1);
+  process.exit(0);
 };
 
 run();

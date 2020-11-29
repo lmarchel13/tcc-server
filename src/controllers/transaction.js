@@ -13,6 +13,7 @@ router.get("/buyer", validateToken, getUserFromToken, async (req, res, next) => 
       userId,
       query: { limit = 20, offset = 0 },
     } = req;
+    log.info("Loading buyer transactions", { userId });
 
     const transactions = await TransactionService.getBuyerTransactions(userId, { limit, offset });
     return res.send(transactions);
