@@ -15,10 +15,7 @@ const schema = new Schema(
     document: "string",
     startTime: "string",
     endTime: "string",
-    openDays: {
-      type: [Schema.Types.String],
-      required: true,
-    },
+    openDays: ["string"],
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",

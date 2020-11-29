@@ -11,6 +11,32 @@ const { BadRequestError } = require("../utils/errors");
 const router = Router();
 const log = logger("Service Controller");
 
+router.get("/offers", async (req, res, next) => {
+  const { limit, offset } = req.query;
+  const todayWeekday = new Date().getDay();
+
+  try {
+    const offers = await ServiceService.getServicesByDay(todayWeekday, { limit, offset });
+    res.send(offers);
+  } catch (error) {
+    log.error("Could not load day offers", { todayWeekday, error });
+    next(error);
+  }
+});
+
+router.get("/search", async (req, res, next) => {
+  const { limit = 20, offset = 0, term = "" } = req.query;
+  log.info(`Searching services by name: ${term}`);
+
+  try {
+    const services = await ServiceService.search(term, { limit, offset });
+    return res.send(services);
+  } catch (error) {
+    log.error("Could not load services by term", { term, error });
+    next(error);
+  }
+});
+
 router.get("/:id", async (req, res, next) => {
   const { id } = req.params;
 

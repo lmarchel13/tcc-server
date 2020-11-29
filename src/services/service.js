@@ -1,5 +1,5 @@
-const { Service } = require("../models");
-const Company = require("../models/Company");
+const { Service, Company } = require("../models");
+const Category = require("../models/Category");
 const {
   errors: { NotFoundError },
 } = require("../utils");
@@ -15,7 +15,13 @@ const getByCompanyId = async (companyId) => {
   return Service.find({ company: { _id: companyId } }).populate("category");
 };
 const createService = async (payload) => {
-  return Service.create(payload);
+  const company = await Company.findById(payload.company.id);
+  const service = await Service.create(payload);
+
+  company.services.push(service);
+  await company.save();
+
+  return service;
 };
 const updateService = async (id, payload) => {
   return Service.findByIdAndUpdate(id, payload);
@@ -31,9 +37,10 @@ const getLastOffers = async (limit = 20) => {
     .sort("desc");
 };
 
-const search = async (name = "", { limit, offset }) => {
+const search = async (name = "", { limit = 20, offset = 0 }) => {
+  console.log("search service by name", name);
   return Service.find({ name: { $regex: new RegExp(name, "i") } })
-    .populate("company", "id name plan", null, { populate: { path: "plan" } })
+    .populate("company", "id name plan openDays startTime endTime", null, { populate: { path: "plan" } })
     .sort("-company plan value")
     .limit(+limit)
     .skip(+offset);
@@ -46,6 +53,15 @@ const getByCategoryId = async (categoryId, { limit, offset }) => {
     .populate("company");
 };
 
+const getServicesByDay = async (day, { limit = 20, offset = 0 }) => {
+  return Company.find({ openDays: `${day}` })
+    .populate("plan")
+    .populate("services")
+    .limit(+limit)
+    .skip(+offset)
+    .sort("-plan");
+};
+
 module.exports = {
   getById,
   getByCompanyId,
@@ -55,4 +71,5 @@ module.exports = {
   getLastOffers,
   search,
   getByCategoryId,
+  getServicesByDay,
 };

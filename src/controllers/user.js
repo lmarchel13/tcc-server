@@ -6,6 +6,7 @@ const {
 } = require("../utils");
 const { UserService } = require("../services");
 const { UserValidator } = require("./validators");
+const { validateToken, getUserFromToken } = require("../middlewares");
 
 const log = logger("Users Controller");
 const router = Router();
@@ -39,6 +40,20 @@ router.post("/signin", async (req, res, next) => {
   const payload = { userId, name, jwt };
 
   return res.status(201).send(payload);
+});
+
+router.get("/me", validateToken, getUserFromToken, async (req, res, next) => {
+  console.log("Am I here????");
+  const { userId } = req;
+  console.log("Loading user", { userId });
+
+  try {
+    const user = await UserService.getById(userId);
+    return res.send(user);
+  } catch (error) {
+    log.error("Could not delete transaction", { id, error });
+    next(error);
+  }
 });
 
 module.exports = router;

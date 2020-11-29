@@ -11,7 +11,7 @@ const find = ({ limit, offset, term }) => {
 };
 
 const getCompanyById = async (id) => {
-  const company = await Company.findOne({ _id: id }).populate("user", "id name email");
+  const company = await Company.findOne({ _id: id }).populate("user", "id name email").populate("plan");
 
   if (!company) throw new NotFoundError("Company not found");
   return company;
@@ -25,7 +25,7 @@ const createCompany = async (payload) => {
   const company = new Company(payload);
   await company.save();
 
-  return company;
+  return getCompanyById(company.id);
 };
 
 const updateCompany = async (id, payload) => {

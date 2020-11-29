@@ -19,13 +19,17 @@ const validateToken = (req, res, next) => {
 const getUserFromToken = (req, res, next) => {
   log.info("Get user from token");
   const { token } = req;
-  const decoded = security.decodeToken(token);
 
-  if (!decoded || !decoded.userId) {
+  try {
+    const decoded = security.decodeToken(token);
+    if (!decoded || !decoded.userId) log.error("Invalid token");
+    req.userId = decoded.userId;
+  } catch (error) {
     next(new UnauthorizedError("Credenciais inválidas"));
   }
 
-  req.userId = decoded.userId;
+  log.info("User loaded", { userId: req.userId });
+
   next();
 };
 

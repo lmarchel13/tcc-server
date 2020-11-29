@@ -7,24 +7,34 @@ const router = Router();
 
 const log = logger("Transaction Controller");
 
-router.get("/buyer", validateToken, getUserFromToken, async (req, res) => {
-  const {
-    userId,
-    query: { limit = 20, offset = 0 },
-  } = req;
+router.get("/buyer", validateToken, getUserFromToken, async (req, res, next) => {
+  try {
+    const {
+      userId,
+      query: { limit = 20, offset = 0 },
+    } = req;
 
-  const transactions = await TransactionService.getBuyerTransactions(userId, { limit, offset });
-  return res.send(transactions);
+    const transactions = await TransactionService.getBuyerTransactions(userId, { limit, offset });
+    return res.send(transactions);
+  } catch (error) {
+    log.error("Could not load buyer transactions", { error });
+    next(error);
+  }
 });
 
-router.get("/seller", validateToken, getUserFromToken, async (req, res) => {
-  const {
-    userId,
-    query: { limit = 20, offset = 0 },
-  } = req;
+router.get("/seller", validateToken, getUserFromToken, async (req, res, next) => {
+  try {
+    const {
+      userId,
+      query: { limit = 20, offset = 0 },
+    } = req;
 
-  const transactions = await TransactionService.getSellerTransactions(userId, { limit, offset });
-  return res.send(transactions);
+    const transactions = await TransactionService.getSellerTransactions(userId, { limit, offset });
+    return res.send(transactions);
+  } catch (error) {
+    log.error("Could not load seller transactions", { error });
+    next(error);
+  }
 });
 
 router.delete("/:id", validateToken, getUserFromToken, async (req, res) => {
