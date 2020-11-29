@@ -1,14 +1,7 @@
 const { Router } = require("express");
 const { validateToken, getUserFromToken } = require("../middlewares");
 const { CompanyValidator, ServiceValidator, TransactionValidator } = require("./validators");
-const {
-  CompanyService,
-  ServiceService,
-  CategoryService,
-  UserService,
-  TransactionService,
-  PaymentMethodService,
-} = require("../services");
+const { CompanyService, ServiceService, CategoryService, UserService, TransactionService } = require("../services");
 const { logger } = require("../utils");
 const { BadRequestError, UnauthorizedError } = require("../utils/errors");
 
@@ -235,64 +228,6 @@ router.post(
       return res.status(201).send(transaction);
     } catch (error) {
       log.error("Could not create transaction", { buyerId, sellerId, serviceId });
-      next(error);
-    }
-  },
-);
-
-router.get("/:id/payment-methods", async (req, res, next) => {
-  const { id } = req.params;
-
-  try {
-    await CompanyService.getCompanyById(id);
-    const paymentMethods = await PaymentMethodService.getByCompanyId(id);
-
-    return res.send(paymentMethods);
-  } catch (error) {
-    log.error("Could not get payment methods", { id, error });
-    next(error);
-  }
-});
-
-router.post("/:id/payment-methods", validateToken, getUserFromToken, async (req, res, next) => {
-  const {
-    userId,
-    params: { id: companyId },
-    body,
-  } = req;
-
-  try {
-    const company = await CompanyService.getCompanyById(companyId);
-    if (company.user.id !== userId) throw new UnauthorizedError("Company does not belong to user");
-
-    const paymentMethods = await PaymentMethodService.addPaymentMethods(company, body);
-
-    return res.status(201).send(paymentMethods);
-  } catch (error) {
-    log.error("Could not add payment methods", { companyId, userId, error });
-    next(error);
-  }
-});
-
-router.delete(
-  "/:companyId/payment-methods/:paymentMethodId",
-  validateToken,
-  getUserFromToken,
-  async (req, res, next) => {
-    const {
-      userId,
-      params: { companyId, paymentMethodId },
-    } = req;
-
-    try {
-      const company = await CompanyService.getCompanyById(companyId);
-      if (company.user.id !== userId) throw new UnauthorizedError("Company does not belong to user");
-
-      await PaymentMethodService.deletePaymentMethod(paymentMethodId);
-
-      res.status(204).send({});
-    } catch (error) {
-      log.error("Could not delete payment methods", { userId, companyId, error });
       next(error);
     }
   },
