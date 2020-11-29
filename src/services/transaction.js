@@ -33,7 +33,7 @@ const getCompanyTransactions = async (sellerId, { limit, offset }) => {
 };
 
 const deleteTransaction = async ({ userId, id }) => {
-  return Transaction.findOneAndDelete({ sellerId: userId, _id: id });
+  return Transaction.findOneAndDelete({ buyer: { _id: userId }, _id: id });
 };
 
 const validateTransaction = async (serviceId, day, time) => {
