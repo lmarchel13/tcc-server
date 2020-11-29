@@ -9,11 +9,10 @@ const models = require("../src/models");
 const CATEGORIES = require("./categories.json");
 const PLANS = require("./plans.json");
 const SERVICES_BY_CATEGORY = require("./services.json");
-const BRAZILIANS_STATES = require("./states");
 
 const BASE_URL = "http://localhost:8000";
 const DEFAULT_PASSWORD = "123456";
-const NUMBER_OF_USERS = 10;
+const NUMBER_OF_USERS = 100;
 const DAYS_OPEN = ["0", "1", "2", "3", "4", "5", "6"];
 
 faker.locale = "pt_BR";
