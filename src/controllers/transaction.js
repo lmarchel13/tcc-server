@@ -46,6 +46,7 @@ router.delete("/:id", validateToken, getUserFromToken, async (req, res) => {
 
   try {
     await TransactionService.deleteTransaction({ id, userId });
+    res.send({ ok: true });
   } catch (error) {
     log.error("Could not delete transaction", { id, error });
     next(error);

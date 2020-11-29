@@ -4,7 +4,7 @@ const {
   logger,
   errors: { BadRequestError, NotFoundError },
 } = require("../utils");
-const { UserService } = require("../services");
+const { UserService, CompanyService } = require("../services");
 const { UserValidator } = require("./validators");
 const { validateToken, getUserFromToken } = require("../middlewares");
 
@@ -37,7 +37,9 @@ router.post("/signin", async (req, res, next) => {
   const jwt = security.createToken(user);
   const { _id: userId, name } = user;
 
-  const payload = { userId, name, jwt };
+  const userCompanies = await CompanyService.getUserCompanies(userId);
+
+  const payload = { userId, name, jwt, userCompanies };
 
   return res.status(201).send(payload);
 });
