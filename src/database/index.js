@@ -4,14 +4,16 @@ const { logger } = require("../utils");
 
 const log = logger("Database");
 
-function startDatabaseConnection() {
-  mongoose
+async function startDatabaseConnection() {
+  return mongoose
     .connect(DATABASE_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
       log.info("Connected successfully to database");
+      return;
     })
     .catch((err) => {
       log.error(`Could not connected to database: ${err.message}`);
+      return;
     });
 }
 

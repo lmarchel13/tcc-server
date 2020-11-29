@@ -1,0 +1,112 @@
+{
+    "Veículos": [
+        "Alinhamento",
+        "Balanceamento",
+        "Funilaria",
+        "Troca de pneus",
+        "Limpeza interna",
+        "Lavagem",
+        "Troca de bateria",
+        "Troca de oléo",
+        "Polimento"
+    ],
+    "Tecnologia": [
+        "Conserto de computador",
+        "Conserto de notebook",
+        "Troca de tela (smartphone)",
+        "Troca de bateria (smartphone)",
+        "Formatação de computadores",
+        "Impressão 3D",
+        "Reparo de videogames"
+    ],
+    "Eletrodomésticos": [
+        "Reparo de fogão",
+        "Reparo de forno",
+        "Reparo de exaustor/coifa",
+        "Reparo de geladeira",
+        "Reparo de microondas",
+        "Reparo de máquina de lavar",
+        "Reparo de secadora",
+        "Reparo de liquidificador",
+        "Reparo de ar condicionado",
+        "Reparo de ventiladores"
+    ],
+    "Esporte e Lazer": [
+        "Personal trainer",
+        "Escolinha de futebol society",
+        "Escolinha de futsal",
+        "Yoga",
+        "Pilates",
+        "Musculação",
+        "Aula de Ballet",
+        "Aula de dança de rua",
+        "Aula de zumba",
+        "Aula de dança de salão",
+        "Aula de sertanejo"
+    ],
+    "Casa": [
+        "Instalação elétrica",
+        "Pintura",
+        "Instalação de piso",
+        "Troca de lâmpadas",
+        "Limpeza geral",
+        "Montagem de móveis",
+        "Carreto",
+        "Troca de fechadura",
+        "Instalação de ar condicionado",
+        "Instalação de ventiladores",
+        "Hidráulica"
+    ],
+    "Estética": [
+        "Corte de cabelo (feminino)",
+        "Corte de cabelo (masculino)",
+        "Barba",
+        "Manicure",
+        "Pedicure",
+        "Podologia",
+        "Sobrancelha",
+        "Coloração de cabelo (pequeno)",
+        "Coloração de cabelo (médio)",
+        "Coloração de cabelo (grande)",
+        "Hidratação de cabelo",
+        "Luzes",
+        "Depilação",
+        "Maquiagem",
+        "Penteados para festa",
+        "Massoterapia"
+    ],
+    "Saúde": [
+        "Limpeza dentária",
+        "Extração dentária",
+        "Implante dentário",
+        "Aparelhos odontológicos",
+        "Raio-X dentário",
+        "Acupuntura",
+        "Terapia",
+        "Fisioterapia",
+        "Quiropraxia",
+        "Homeopatia"
+    ],
+    "Educação": [
+        "Curso de inglês",
+        "Curso de alemão",
+        "Curso de espanhol",
+        "Curso de português",
+        "Curso de italiano",
+        "Curso de francês",
+        "Curso de holandês",
+        "Reforço escolar (matématica)",
+        "Reforço escolar (português)",
+        "Reforço escolar (biologia)",
+        "Reforço escolar (fisíca)",
+        "Reforço escolar (quimíca)",
+        "Reforço escolar (história)",
+        "Reforço escolar (geografia)"
+    ],
+    "Outros": [
+        "Babá",
+        "Cuidadora de idosos",
+        "Dogwalker",
+        "Dogsitter"
+    ]
+}

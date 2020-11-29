@@ -12,6 +12,8 @@ const generatePassword = (password, salt) => {
   hash.update(password);
   const hashedPassword = hash.digest("hex");
 
+  log.debug("Hash password generated");
+
   return { hashedPassword };
 };
 const validatePassword = (user, password) => {

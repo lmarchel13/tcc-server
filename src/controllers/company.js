@@ -30,6 +30,7 @@ router.get("/my-companies", validateToken, getUserFromToken, async (req, res, ne
 });
 
 router.post("/", validateToken, getUserFromToken, CompanyValidator.createCompany, async (req, res, next) => {
+  log.info("Creating company", { userId: req.userId });
   const payload = {
     ...req.body,
     userId: req.userId,
@@ -40,6 +41,7 @@ router.post("/", validateToken, getUserFromToken, CompanyValidator.createCompany
     payload.user = user;
 
     const company = await CompanyService.createCompany(payload);
+    log.info("Company created", { id: company.id });
     return res.status(201).send(company);
   } catch (error) {
     log.error("Could not create company", { error });
@@ -141,11 +143,13 @@ router.post(
       body,
     } = req;
 
+    log.info(`Creating service for company ${id}`);
+
     try {
       const company = await CompanyService.getCompanyById(id);
       const category = await CategoryService.getById(req.body.categoryId);
 
-      const payload = { ...req.body, company, category };
+      const payload = { ...body, company, category };
       const service = await ServiceService.createService(payload);
 
       return res.status(201).send(service);

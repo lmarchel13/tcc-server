@@ -1,7 +1,10 @@
 const Joi = require("joi");
 const {
   errors: { BadRequestError },
+  logger,
 } = require("../../utils");
+
+const log = logger("Company Validator");
 
 const schemas = {
   createCompany: Joi.object({
