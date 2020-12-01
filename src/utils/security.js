@@ -1,6 +1,7 @@
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const { JWT_PRIVATE_KEY } = require("../config");
+const { BadRequestError } = require("./errors");
 const logger = require("./logger");
 
 const log = logger("Security");
@@ -19,6 +20,9 @@ const generatePassword = (password, salt) => {
 const validatePassword = (user, password) => {
   log.debug("Validating password");
   const { salt, hashedPassword } = user;
+
+  if (!salt || !hashedPassword) throw new BadRequestError("Credenciais inválidas");
+
   const compare = generatePassword(password, salt);
   return compare.hashedPassword === hashedPassword;
 };

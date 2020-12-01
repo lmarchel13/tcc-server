@@ -12,7 +12,7 @@ const SERVICES_BY_CATEGORY = require("./services.json");
 
 const BASE_URL = "http://localhost:8000";
 const DEFAULT_PASSWORD = "123456";
-const NUMBER_OF_USERS = 100;
+const NUMBER_OF_USERS = 10;
 const DAYS_OPEN = ["0", "1", "2", "3", "4", "5", "6"];
 
 faker.locale = "pt_BR";

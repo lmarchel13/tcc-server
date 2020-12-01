@@ -12,42 +12,119 @@ const log = logger("Users Controller");
 const router = Router();
 
 router.post("/signup", UserValidator.createUser, async (req, res, next) => {
-  const { firstName, lastName, email, password } = req.body;
+  const { firstName, lastName, email, password, googleId } = req.body;
+  log.debug("Signup", { email, googleId });
 
-  const salt = security.generateSalt();
-  const { hashedPassword } = await security.generatePassword(password, salt);
+  if (await UserService.findByEmail(email)) {
+    return next(new BadRequestError("Email already in use"));
+  }
 
-  log.debug("Signup", { email });
+  const payload = {
+    firstName,
+    lastName,
+    email,
+  };
 
-  if (await UserService.findByEmail(email)) return next(new BadRequestError("Email already in use"));
+  try {
+    if (password) {
+      log.debug("Signup with password");
+      const salt = security.generateSalt();
+      const { hashedPassword } = await security.generatePassword(password, salt);
 
-  const user = await UserService.createUser({ firstName, lastName, email, salt, hashedPassword });
+      payload.salt = salt;
+      payload.hashedPassword = hashedPassword;
+    }
 
-  return res.status(201).send({ id: user._id });
+    if (googleId) {
+      log.debug("Signup with OAuth2");
+      payload.googleId = googleId;
+    }
+
+    const user = await UserService.createUser(payload);
+
+    log.info("User created", user);
+
+    return res.status(201).send({ id: user._id });
+  } catch (error) {
+    log.error("Error while signup:", error.message);
+    next(error);
+  }
 });
 
 router.post("/signin", async (req, res, next) => {
-  const { email, password } = req.body;
-  log.debug("Signin", { email });
-  const user = await UserService.findByEmail(email);
+  const { email, password, googleId } = req.body;
+  log.debug("Signin", { email, googleId, password });
 
-  if (!user) return next(new NotFoundError("Invalid credentials"));
-  if (!security.validatePassword(user, password)) return next(new NotFoundError("Invalid credentials"));
+  try {
+    let user;
 
-  const jwt = security.createToken(user);
-  const { _id: userId, name } = user;
+    if (email) {
+      log.debug("Logging in with email");
+      user = await UserService.findByEmail(email);
 
-  const userCompanies = await CompanyService.getUserCompanies(userId);
+      if (!user) return next(new NotFoundError("Credenciais inválidas"));
 
-  const payload = { userId, name, jwt, userCompanies };
+      if (!password) return next(new BadRequestError("Credenciais inválidas"));
 
-  return res.status(201).send(payload);
+      if (!security.validatePassword(user, password)) return next(new NotFoundError("Credenciais inválidas"));
+    }
+
+    if (googleId) {
+      log.debug("Logging in with OAuth2");
+      user = await UserService.findByGoogleId(googleId);
+      if (!user) return next(new NotFoundError("Credenciais inválidas"));
+    }
+
+    const jwt = security.createToken(user);
+    const { _id: userId, firstName, lastName } = user;
+
+    const userCompanies = await CompanyService.getUserCompanies(userId);
+
+    const payload = { userId, firstName, lastName, jwt, userCompanies };
+
+    log.info("Logged In", payload);
+
+    return res.status(201).send(payload);
+  } catch (error) {
+    log.error("Error while signin:", error.message);
+    next(error);
+  }
+});
+
+router.patch("/", validateToken, getUserFromToken, async (req, res, next) => {
+  const { firstName, lastName, email, password } = req.body;
+  const { userId } = req;
+
+  try {
+    if (!firstName || !lastName || !email || !password) {
+      throw new BadRequestError("Preencha todos os campos antes de atualizar");
+    }
+
+    const user = await UserService.getById(userId);
+
+    user.firstName = firstName;
+    user.lastName = lastName;
+    user.email = email;
+
+    const salt = security.generateSalt();
+    const { hashedPassword } = await security.generatePassword(password, salt);
+
+    user.salt = salt;
+    user.hashedPassword = hashedPassword;
+
+    await user.save();
+
+    log.info("User updated", user);
+
+    return res.send(user);
+  } catch (error) {
+    log.error("Error while updating user", error.message);
+    next(error);
+  }
 });
 
 router.get("/me", validateToken, getUserFromToken, async (req, res, next) => {
-  console.log("Am I here????");
   const { userId } = req;
-  console.log("Loading user", { userId });
 
   try {
     const user = await UserService.getById(userId);

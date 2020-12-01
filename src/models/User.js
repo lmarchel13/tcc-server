@@ -7,6 +7,7 @@ const schema = new Schema(
     firstName: "string",
     lastName: "string",
     email: "string",
+    googleId: "string",
     hashedPassword: "string",
     salt: "string",
     companies: [{ type: Schema.Types.ObjectId, ref: "Company" }],

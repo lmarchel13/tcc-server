@@ -8,8 +8,8 @@ const findByEmail = async (email) => {
   return user;
 };
 const createUser = async (payload) => {
-  const { firstName, lastName, email, salt, hashedPassword } = payload;
-  const user = new User({ firstName, lastName, email, salt, hashedPassword });
+  const { firstName, lastName, email, salt, hashedPassword, googleId } = payload;
+  const user = new User({ firstName, lastName, email, salt, hashedPassword, googleId });
 
   await user.save();
   return user;
@@ -21,8 +21,13 @@ const getById = async (id) => {
   return user;
 };
 
+const findByGoogleId = async (googleId) => {
+  return User.findOne({ googleId });
+};
+
 module.exports = {
   findByEmail,
   createUser,
   getById,
+  findByGoogleId,
 };

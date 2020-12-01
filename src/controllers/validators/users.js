@@ -8,7 +8,8 @@ const schemas = {
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),
     email: Joi.string().required(),
-    password: Joi.string().required(),
+    password: Joi.string(),
+    googleId: Joi.string(),
   }),
 };
 
