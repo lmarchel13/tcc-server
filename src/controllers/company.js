@@ -1,12 +1,58 @@
 const { Router } = require("express");
 const { validateToken, getUserFromToken } = require("../middlewares");
 const { CompanyValidator, ServiceValidator, TransactionValidator } = require("./validators");
-const { CompanyService, ServiceService, CategoryService, UserService, TransactionService } = require("../services");
+const {
+  CompanyService,
+  ServiceService,
+  CategoryService,
+  UserService,
+  TransactionService,
+  MessageService,
+} = require("../services");
 const { logger } = require("../utils");
 const { BadRequestError, UnauthorizedError } = require("../utils/errors");
+const message = require("../services/message");
 
 const router = Router();
 const log = logger("Company Controller");
+
+router.get("/messages", validateToken, getUserFromToken, async (req, res, next) => {
+  const {
+    userId,
+    query: { ids },
+  } = req;
+
+  try {
+    const companiesIDs = ids.split(",");
+    log.info("Loading messages for companies", { companiesIDs });
+
+    const companies = await Promise.all(companiesIDs.map((id) => CompanyService.getCompanyById(id)));
+    if (companiesIDs === 0) return res.send([]);
+
+    companies.forEach((company) => {
+      if (company.user.id !== userId) throw new UnauthorizedError("Acesso não permitido");
+    });
+
+    const messagesByCompanyId = await MessageService.getMessagesFromCompanies(companiesIDs);
+
+    const messagesBySenderId = {};
+
+    for (const companyId in messagesByCompanyId) {
+      const messages = messagesByCompanyId[companyId];
+
+      messages.forEach((msg) => {
+        messagesBySenderId[msg.sender.id]
+          ? messagesBySenderId[msg.sender.id].push(msg)
+          : (messagesBySenderId[msg.sender.id] = [msg]);
+      });
+    }
+
+    return res.send(messagesBySenderId);
+  } catch (error) {
+    log.error("Could not load messages from companies", { error, ids });
+    next(error);
+  }
+});
 
 router.get("/my-companies", validateToken, getUserFromToken, async (req, res, next) => {
   log.info("Loading my companies", { userId: req.userId });

@@ -4,6 +4,7 @@ const Service = require("./Service");
 const Category = require("./Category");
 const Plan = require("./Plan");
 const Transaction = require("./Transaction");
+const Message = require("./Message");
 
 module.exports = {
   User,
@@ -12,4 +13,5 @@ module.exports = {
   Category,
   Plan,
   Transaction,
+  Message,
 };
