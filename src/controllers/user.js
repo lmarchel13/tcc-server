@@ -42,7 +42,7 @@ router.post("/signup", UserValidator.createUser, async (req, res, next) => {
 
     const user = await UserService.createUser(payload);
 
-    log.info("User created", user);
+    log.info("User created", user.id);
 
     return res.status(201).send({ id: user._id });
   } catch (error) {

@@ -35,6 +35,7 @@ router.post("/", validateToken, getUserFromToken, async (req, res, next) => {
     const message = await MessageService.createMessage({ text, companyId, userId, direction });
 
     log.info("Message created", { id: message.id });
+
     return res.status(201).send(message);
   } catch (error) {
     log.error("Error while creating message", error.message);

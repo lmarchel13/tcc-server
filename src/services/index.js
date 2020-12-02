@@ -6,6 +6,7 @@ const PlanService = require("./plan");
 const TransactionService = require("./transaction");
 const PaymentMethodService = require("./paymentMethod");
 const MessageService = require("./message");
+const ConversationService = require("./conversation");
 
 module.exports = {
   UserService,
@@ -16,4 +17,5 @@ module.exports = {
   TransactionService,
   PaymentMethodService,
   MessageService,
+  ConversationService,
 };

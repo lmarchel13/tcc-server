@@ -13,7 +13,7 @@ async function startDatabaseConnection() {
     })
     .catch((err) => {
       log.error(`Could not connected to database: ${err.message}`);
-      return;
+      return err;
     });
 }
 

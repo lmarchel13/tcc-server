@@ -1,20 +1,24 @@
 const { Schema, model } = require("mongoose");
+const { logger } = require("../utils");
 
 const name = "Message";
+const log = logger("Model loader");
+log.info(`${name}`);
+
 const schema = new Schema(
   {
+    conversation: {
+      type: Schema.Types.ObjectId,
+      ref: "Conversation",
+      required: true,
+    },
     text: "string",
-    direction: "string",
-    sender: {
+    user: {
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    company: {
-      type: Schema.Types.ObjectId,
-      ref: "Company",
-      required: true,
-    },
+    sender: "string", // USER or COMPANY
   },
   {
     timestamps: true,

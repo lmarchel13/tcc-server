@@ -3,19 +3,22 @@ const {
 } = require("../utils");
 const { Message, Company, User } = require("../models");
 const { UnauthorizedError } = require("../utils/errors");
+const Conversation = require("../models/Conversation");
 
 const createMessage = async (payload) => {
-  const { companyId, userId, text, direction } = payload;
+  const { conversationId, text, sender, userId } = payload;
 
-  const company = await Company.findById(companyId);
-  if (!company) throw NotFoundError("Empresa não encontrada");
+  const conversation = await Conversation.findById(conversationId);
+  if (!conversation) throw new NotFoundError("Chat não encontrado");
 
   const user = await User.findById(userId);
-  if (!user) throw NotFoundError("Usuario não encontrado");
+  if (!user) throw new NotFoundError("Usuario não encontrado");
 
-  const message = new Message({ text, sender: user, company, direction });
+  const message = new Message({ text, conversation, user, sender });
 
   await message.save();
+  conversation.messages.push(message);
+  await conversation.save();
 
   return message;
 };

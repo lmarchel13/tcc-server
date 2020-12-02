@@ -5,9 +5,8 @@ const cors = require("cors");
 const { startDatabaseConnection } = require("./database");
 const controllers = require("./controllers");
 
-const app = express();
-
 startDatabaseConnection();
+const app = express();
 
 app.use(cors());
 app.use(express.json());

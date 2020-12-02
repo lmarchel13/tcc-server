@@ -1,29 +1,31 @@
 const { Schema, model } = require("mongoose");
 const { logger } = require("../utils");
 
-const name = "Service";
+const name = "Conversation";
 const log = logger("Model loader");
 log.info(`${name}`);
 
 const schema = new Schema(
   {
-    name: "string",
-    description: "string",
-    category: {
+    user: {
       type: Schema.Types.ObjectId,
-      ref: "Category",
+      ref: "User",
       required: true,
     },
-    duration: "string",
-    type: "string",
-    value: "number",
     company: {
       type: Schema.Types.ObjectId,
       ref: "Company",
       required: true,
     },
+    service: {
+      type: Schema.Types.ObjectId,
+      ref: "Service",
+      required: true,
+    },
+    messages: [{ type: Schema.Types.ObjectId, ref: "Message" }],
   },
   {
+    timestamps: true,
     toJSON: {
       transform(doc, ret) {
         const id = ret._id;

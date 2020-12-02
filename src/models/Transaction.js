@@ -1,6 +1,10 @@
 const { Schema, model } = require("mongoose");
+const { logger } = require("../utils");
 
 const name = "Transaction";
+const log = logger("Model loader");
+log.info(`${name}`);
+
 const schema = new Schema(
   {
     buyer: {

@@ -8,10 +8,10 @@ const {
   UserService,
   TransactionService,
   MessageService,
+  ConversationService,
 } = require("../services");
 const { logger } = require("../utils");
 const { BadRequestError, UnauthorizedError } = require("../utils/errors");
-const message = require("../services/message");
 
 const router = Router();
 const log = logger("Company Controller");
@@ -64,6 +64,25 @@ router.get("/my-companies", validateToken, getUserFromToken, async (req, res, ne
     return res.send(companies);
   } catch (error) {
     log.error("Could not load my company", { error });
+    next(error);
+  }
+});
+
+router.get("/conversations", validateToken, getUserFromToken, async (req, res, next) => {
+  const { userId } = req;
+
+  try {
+    const companies = await CompanyService.getUserCompanies(userId);
+
+    if (companies.length === 0) return res.send([]);
+
+    const companiesIDs = companies.map((c) => c.id);
+
+    const conversations = await ConversationService.getCompaniesConversation(companiesIDs);
+
+    return res.send(conversations);
+  } catch (error) {
+    log.error("Could not load companies conversations", { error });
     next(error);
   }
 });
@@ -182,7 +201,7 @@ router.post(
       body,
     } = req;
 
-    log.info(`Creating service for company ${id}`);
+    log.info(`Creating service for company`, { id, ...body });
 
     try {
       const company = await CompanyService.getCompanyById(id);

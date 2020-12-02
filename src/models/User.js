@@ -1,7 +1,11 @@
 const { Schema, model } = require("mongoose");
 const { omit } = require("lodash");
+const { logger } = require("../utils");
 
 const name = "User";
+const log = logger("Model loader");
+log.info(`${name}`);
+
 const schema = new Schema(
   {
     firstName: "string",
