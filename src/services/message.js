@@ -1,9 +1,7 @@
 const {
-  errors: { NotFoundError },
+  errors: { NotFoundError, UnauthorizedError },
 } = require("../utils");
-const { Message, Company, User } = require("../models");
-const { UnauthorizedError } = require("../utils/errors");
-const Conversation = require("../models/Conversation");
+const { Message, Company, User, Conversation } = require("../models");
 
 const createMessage = async (payload) => {
   const { conversationId, text, sender, userId } = payload;
@@ -15,8 +13,8 @@ const createMessage = async (payload) => {
   if (!user) throw new NotFoundError("Usuario não encontrado");
 
   const message = new Message({ text, conversation, user, sender });
-
   await message.save();
+
   conversation.messages.push(message);
   await conversation.save();
 

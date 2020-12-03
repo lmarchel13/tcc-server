@@ -1,6 +1,7 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const http = require("http");
 
 const { startDatabaseConnection } = require("./database");
 const controllers = require("./controllers");
@@ -23,4 +24,6 @@ app.use(function (err, req, res, next) {
   return res.status(error.code || 500).send(error);
 });
 
-module.exports = app;
+const server = http.createServer(app);
+
+module.exports = server;

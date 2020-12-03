@@ -1,10 +1,10 @@
 const { Router } = require("express");
+
 const { ConversationService, MessageService } = require("../services");
-const { logger } = require("../utils");
+const { logger, eventHandler } = require("../utils");
 const { validateToken, getUserFromToken } = require("../middlewares");
 
 const router = Router();
-
 const log = logger("Conversation Controller");
 
 router.post("/:conversationId/messages", validateToken, getUserFromToken, async (req, res, next) => {
@@ -19,6 +19,12 @@ router.post("/:conversationId/messages", validateToken, getUserFromToken, async 
 
   try {
     const message = await MessageService.createMessage(payload);
+
+    const eventName = sender === "USER" ? "NEW_MESSAGE_FROM_USER" : "NEW_MESSAGE_FROM_COMPANY";
+    log.info(`Emitting event: ${eventName}`);
+
+    eventHandler.emit(eventName, { userId, conversationId, message });
+
     return res.status(201).send(message);
   } catch (error) {
     log.error("Could not create message", { error });

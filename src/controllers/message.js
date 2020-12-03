@@ -32,7 +32,7 @@ router.post("/", validateToken, getUserFromToken, async (req, res, next) => {
   log.info("Sending message:", { userId, text, companyId });
 
   try {
-    const message = await MessageService.createMessage({ text, companyId, userId, direction });
+    const { message, conversation } = await MessageService.createMessage({ text, companyId, userId, direction });
 
     log.info("Message created", { id: message.id });
 
