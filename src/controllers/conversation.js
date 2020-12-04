@@ -1,6 +1,6 @@
 const { Router } = require("express");
 
-const { ConversationService, MessageService } = require("../services");
+const { ConversationService, MessageService, CompanyService, UserService } = require("../services");
 const { logger, eventHandler } = require("../utils");
 const { validateToken, getUserFromToken } = require("../middlewares");
 
@@ -23,7 +23,16 @@ router.post("/:conversationId/messages", validateToken, getUserFromToken, async 
     const eventName = sender === "USER" ? "NEW_MESSAGE_FROM_USER" : "NEW_MESSAGE_FROM_COMPANY";
     log.info(`Emitting event: ${eventName}`);
 
-    eventHandler.emit(eventName, { userId, conversationId, message });
+    let room;
+    if (sender === "USER") {
+      const companyId = message.conversation.company;
+      const sendToUser = await UserService.findUserByCompanyId(companyId);
+      room = sendToUser.id;
+    } else {
+      room = message.conversation.user;
+    }
+
+    eventHandler.emit(eventName, { userId, conversationId, message, room });
 
     return res.status(201).send(message);
   } catch (error) {

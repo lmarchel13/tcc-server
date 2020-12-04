@@ -1,5 +1,6 @@
 const { logger } = require("../utils");
 const { User } = require("../models");
+const Company = require("../models/Company");
 const log = logger("User Service");
 
 const findByEmail = async (email) => {
@@ -25,9 +26,18 @@ const findByGoogleId = async (googleId) => {
   return User.findOne({ googleId });
 };
 
+const findUserByCompanyId = async (id) => {
+  const company = await Company.findById(id).populate("user");
+
+  const { user } = company;
+
+  return user;
+};
+
 module.exports = {
   findByEmail,
   createUser,
   getById,
   findByGoogleId,
+  findUserByCompanyId,
 };
