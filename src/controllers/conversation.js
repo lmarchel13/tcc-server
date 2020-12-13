@@ -63,7 +63,8 @@ router.post("/", validateToken, getUserFromToken, async (req, res, next) => {
       return res.status(200).send(conversation);
     }
 
-    return ConversationService.createConversation({ serviceId, companyId, userId });
+    const newConversation = await ConversationService.createConversation({ serviceId, companyId, userId });
+    return res.status(201).send(newConversation);
   } catch (error) {
     log.error("Could not create conversation", { error });
     next(error);
