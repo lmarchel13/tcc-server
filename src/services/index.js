@@ -7,6 +7,7 @@ const TransactionService = require("./transaction");
 const PaymentMethodService = require("./paymentMethod");
 const MessageService = require("./message");
 const ConversationService = require("./conversation");
+const ReportService = require("./report");
 
 module.exports = {
   UserService,
@@ -18,4 +19,5 @@ module.exports = {
   PaymentMethodService,
   MessageService,
   ConversationService,
+  ReportService,
 };

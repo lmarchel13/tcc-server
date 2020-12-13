@@ -33,26 +33,24 @@ io.on("connection", (socket) => {
 });
 
 eventHandler.on("NEW_MESSAGE_FROM_USER", (payload) => {
-  wsLog.debug(`New message from ${payload.userId} to ${payload.room}`);
+  wsLog.debug(`NEW_MESSAGE_FROM_USER from ${payload.userId} to ${payload.room}`);
 
   const sendToRoom = relationship[payload.room];
 
-  // io.emit("NEW_MESSAGE_FROM_USER", payload);
   io.to(sendToRoom).emit("NEW_MESSAGE_FROM_USER", payload);
 });
 
 eventHandler.on("NEW_MESSAGE_FROM_COMPANY", (payload) => {
-  wsLog.debug(`New message from ${payload.userId} to ${payload.room}`);
+  wsLog.debug(`NEW_MESSAGE_FROM_COMPANY from ${payload.userId} to ${payload.room}`);
 
   const sendToRoom = relationship[payload.room];
 
-  // io.emit("NEW_MESSAGE_FROM_COMPANY", payload);
   io.to(sendToRoom).emit("NEW_MESSAGE_FROM_COMPANY", payload);
 });
 
 setInterval(() => {
   wsLog.debug(`Connected users to WS: ${connections.size}`);
-}, 30000);
+}, 5000);
 
 server.listen(PORT, () => {
   appLog.info(`Listening to port ${PORT}`);
