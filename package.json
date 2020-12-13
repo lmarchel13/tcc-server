@@ -19,11 +19,13 @@
   "devDependencies": {
     "dotenv": "^8.2.0",
     "faker": "^5.1.0",
+    "jest": "^26.6.3",
     "nodemon": "^2.0.6",
     "prettier": "^2.1.2"
   },
   "scripts": {
     "dev": "nodemon index.js",
-    "seed": "node seed/index.js"
+    "seed": "node seed/index.js",
+    "test": "export ENV_MODE=test && jest"
   }
 }

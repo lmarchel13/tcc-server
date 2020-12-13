@@ -3,7 +3,7 @@ const {
 } = require("../utils");
 const { Category } = require("../models");
 
-const find = async ({ limit = 20, offset = 0 }) => {
+const find = async ({ limit = 20, offset = 0 } = {}) => {
   return Category.find()
     .limit(+limit)
     .skip(+offset);
@@ -12,7 +12,6 @@ const find = async ({ limit = 20, offset = 0 }) => {
 const createCategory = async (payload) => {
   const category = new Category(payload);
   await category.save();
-
   return category;
 };
 
