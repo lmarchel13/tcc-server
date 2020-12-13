@@ -2,14 +2,17 @@ const { Transaction } = require("../models");
 const CompanyService = require("./company");
 
 const getBuyerTransactions = async (buyerId, { limit = 20, offset = 0 }) => {
-  const transactions = await Transaction.find({ buyer: { _id: buyerId } })
-    .populate("seller")
-    .populate("buyer")
-    .populate("service")
-    .limit(+limit)
-    .skip(+offset);
-
-  return transactions;
+  return limit !== "all"
+    ? Transaction.find({ buyer: { _id: buyerId } })
+        .populate("seller")
+        .populate("buyer")
+        .populate("service")
+        .limit(+limit)
+        .skip(+offset)
+    : Transaction.find({ buyer: { _id: buyerId } })
+        .populate("seller")
+        .populate("buyer")
+        .populate("service");
 };
 
 const getSellerTransactions = async (sellerId, { limit = 20, offset = 0 }) => {
@@ -18,12 +21,17 @@ const getSellerTransactions = async (sellerId, { limit = 20, offset = 0 }) => {
 
   const companyIDs = companies.map((company) => company.id);
 
-  return Transaction.find({ seller: { _id: companyIDs } })
-    .populate("seller")
-    .populate("buyer")
-    .populate("service")
-    .limit(+limit)
-    .skip(+offset);
+  return limit !== "all"
+    ? Transaction.find({ seller: { _id: companyIDs } })
+        .populate("seller")
+        .populate("buyer")
+        .populate("service")
+        .limit(+limit)
+        .skip(+offset)
+    : Transaction.find({ seller: { _id: companyIDs } })
+        .populate("seller")
+        .populate("buyer")
+        .populate("service");
 };
 
 const getCompanyTransactions = async (sellerId, { limit, offset }) => {
