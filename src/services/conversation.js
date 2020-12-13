@@ -57,4 +57,14 @@ const getCompaniesConversation = async (companiesIDs) => {
     .populate("messages");
 };
 
-module.exports = { getConversation, createConversation, getCompaniesConversation };
+const addMessage = async (conversationId, message) => {
+  const conversation = await Conversation.findById(conversationId);
+
+  if (!conversation) throw new NotFoundError("Chat não encontrado");
+
+  conversation.messages.push(message);
+
+  await conversation.save();
+};
+
+module.exports = { getConversation, createConversation, getCompaniesConversation, addMessage };

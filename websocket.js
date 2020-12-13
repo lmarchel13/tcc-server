@@ -26,24 +26,17 @@ io.on("connection", (socket) => {
 eventHandler.on("NEW_MESSAGE_FROM_USER", (payload) => {
   log.debug(`NEW_MESSAGE_FROM_USER from ${payload.userId} to ${payload.room}`);
 
-  const sendToRoom = relationship[payload.room];
+  const room = relationship[payload.room];
 
-  io.to(sendToRoom).emit("NEW_MESSAGE_FROM_USER", payload);
+  io.to(room).emit("NEW_MESSAGE_FROM_USER", payload);
 });
 
 eventHandler.on("NEW_MESSAGE_FROM_COMPANY", (payload) => {
   log.debug(`NEW_MESSAGE_FROM_COMPANY from ${payload.userId} to ${payload.room}`);
 
-  const sendToRoom = relationship[payload.room];
+  const room = relationship[payload.room];
 
-  io.to(sendToRoom).emit("NEW_MESSAGE_FROM_COMPANY", payload);
-});
-
-eventHandler.on("NEW_CONVERSATION", (payload) => {
-  log.debug(`NEW_CONVERSATION from ${payload.userId} to ${payload.room}`);
-  const sendToRoom = relationship[payload.room];
-
-  io.to(sendToRoom).emit("NEW_CONVERSATION", payload);
+  io.to(room).emit("NEW_MESSAGE_FROM_COMPANY", payload);
 });
 
 setInterval(() => {

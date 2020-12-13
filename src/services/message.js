@@ -12,13 +12,10 @@ const createMessage = async (payload) => {
   const user = await User.findById(userId);
   if (!user) throw new NotFoundError("Usuario não encontrado");
 
-  const message = new Message({ text, conversation, user, sender });
-  await message.save();
+  const newMessage = new Message({ text, conversation, user, sender });
+  await newMessage.save();
 
-  conversation.messages.push(message);
-  await conversation.save();
-
-  return message;
+  return newMessage;
 };
 
 const deleteMessage = async ({ userId, id }) => {
