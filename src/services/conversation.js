@@ -54,7 +54,8 @@ const getCompaniesConversation = async (companiesIDs) => {
     .populate("service")
     .populate("company")
     .populate("user")
-    .populate("messages");
+    .populate("messages")
+    .sort("-updatedAt");
 };
 
 const addMessage = async (conversationId, message) => {
