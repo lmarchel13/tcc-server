@@ -16,7 +16,11 @@ router.get("/", async (req, res) => {
     const lastService = categories.find((category) => category.name === "Outros");
     const other = categories.filter((category) => category.name !== "Outros");
 
-    return res.send([...other, lastService]);
+    if (lastService) {
+      return res.send([...other, lastService]);
+    }
+
+    return res.send(other);
   } catch (error) {
     log.error("Could not get categories", { error });
     next(error);

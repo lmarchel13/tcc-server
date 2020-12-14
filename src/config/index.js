@@ -1,4 +1,7 @@
-require("dotenv").config();
+const path = require("path");
+require("dotenv").config({
+  path: path.resolve(__dirname, `../../.env.${process.env.NODE_ENV}`),
+});
 
 const DEFAULT_PAYMENT_METHODS = ["Dinheiro", "Cartão Débito", "Cartão Crédito"];
 
@@ -11,6 +14,3 @@ module.exports = {
   OAUTH_ID: process.env.OAUTH_ID || "527214406910-5rkm3vv611cftn5o8969539m3dreg6t6.apps.googleusercontent.com",
   OAUTH_SECRET_KEY: process.env.OAUTH_SECRET_KEY || "LFkX3xJCQT6JhbiipfKe48GZ",
 };
-
-// 527214406910-5rkm3vv611cftn5o8969539m3dreg6t6.apps.googleusercontent.com
-// LFkX3xJCQT6JhbiipfKe48GZ

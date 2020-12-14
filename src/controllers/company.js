@@ -99,6 +99,7 @@ router.post("/", validateToken, getUserFromToken, CompanyValidator.createCompany
     payload.user = user;
 
     const company = await CompanyService.createCompany(payload);
+
     log.info("Company created", { id: company.id });
     return res.status(201).send(company);
   } catch (error) {
@@ -169,7 +170,7 @@ router.delete("/:id", validateToken, getUserFromToken, async (req, res, next) =>
 
     await CompanyService.deleteCompany(id, req.body);
 
-    return res.send(company);
+    return res.status(204).send({});
   } catch (error) {
     log.error("Could not update company", { id, error });
 
@@ -219,20 +220,22 @@ router.post(
 );
 
 router.patch(
-  "/:id/services",
+  "/:id/services/:serviceId",
   validateToken,
   getUserFromToken,
   ServiceValidator.patchService,
   async (req, res, next) => {
     const {
-      params: { id },
+      params: { id, serviceId },
       body,
     } = req;
 
     try {
       await CompanyService.getCompanyById(id);
 
-      const service = await ServiceService.updateService(id, req.body);
+      await ServiceService.updateService(serviceId, req.body);
+
+      const service = await ServiceService.getById(serviceId);
 
       return res.status(200).send(service);
     } catch (error) {

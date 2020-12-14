@@ -17,7 +17,8 @@ router.get("/offers", async (req, res, next) => {
 
   try {
     const offers = await ServiceService.getServicesByDay(todayWeekday, { limit, offset });
-    res.send(offers);
+
+    return res.send(offers);
   } catch (error) {
     log.error("Could not load day offers", { todayWeekday, error });
     next(error);
@@ -61,7 +62,7 @@ router.delete("/:id", validateToken, getUserFromToken, async (req, res, next) =>
 
     const company = await CompanyService.getCompanyById(companyId);
 
-    if (req.userId !== company.userId) throw new UnauthorizedError("Service does not belong to company");
+    if (req.userId !== company.user.id) throw new UnauthorizedError("Service does not belong to company");
 
     await ServiceService.deleteService(id);
 
@@ -102,7 +103,7 @@ router.post("/:serviceId/book", validateToken, getUserFromToken, async (req, res
     const transaction = new Transaction(payload);
     await transaction.save();
 
-    return res.send(transaction);
+    return res.status(201).send(transaction);
   } catch (error) {
     log.error("Could not book service", { serviceId, userId, error });
     next(error);

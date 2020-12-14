@@ -35,8 +35,6 @@ router.post("/:conversationId/messages", validateToken, getUserFromToken, async 
     log.info(`Emitting event ${eventName} from ${sender} to userId ${room}`);
     eventHandler.emit(eventName, { userId, conversationId, message: message, room });
 
-    console.log("Event emitted");
-
     return res.status(201).send(message);
   } catch (error) {
     log.error("Could not create message", { error });

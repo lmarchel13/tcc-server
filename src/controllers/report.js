@@ -16,12 +16,14 @@ router.get("/", validateToken, getUserFromToken, async (req, res, next) => {
 
   try {
     const companies = await CompanyService.getUserCompanies(userId);
-    const payload = { name, userId, companies };
+
+    const payload = { name, companies };
 
     const data = await ReportService.getReport(payload);
 
     return res.send(data);
   } catch (error) {
+    console.error("Could not load report", { error, name });
     log.error("Could not load report", { error, name });
     next(error);
   }

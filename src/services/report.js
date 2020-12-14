@@ -42,7 +42,7 @@ const MONTHS_VALUE = {
   Dez: 12,
 };
 
-const getReport = async ({ name, userId, companies }) => {
+const getReport = async ({ name, companies }) => {
   const reportsObject = {};
 
   switch (name) {
@@ -105,7 +105,7 @@ const getReport = async ({ name, userId, companies }) => {
         });
     case REPORTS.PER_COMPANY:
       const reportsPerCompany = await Transaction.find({
-        seller: { _id: companies.map((c) => c.id) },
+        seller: companies.map((c) => c.id),
       }).populate("seller");
 
       reportsPerCompany.forEach((t) => {
@@ -123,8 +123,6 @@ const getReport = async ({ name, userId, companies }) => {
       const reportsPerCategory = await Transaction.find({
         seller: { _id: companies.map((c) => c.id) },
       }).populate("service", "name", null, { populate: { path: "category" } });
-
-      console.log("reportsPerCategory", reportsPerCategory);
 
       reportsPerCategory.forEach((t) => {
         const {

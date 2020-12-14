@@ -1,5 +1,4 @@
 const { Service, Company } = require("../models");
-const Category = require("../models/Category");
 const {
   errors: { NotFoundError },
 } = require("../utils");
@@ -7,7 +6,7 @@ const {
 const getById = async (id) => {
   const service = await Service.findById(id).populate("company");
 
-  if (!service) throw new NotFoundError("Service not found");
+  if (!service) throw new NotFoundError("Serviço não encontrados");
 
   return service;
 };
@@ -38,7 +37,6 @@ const getLastOffers = async (limit = 20) => {
 };
 
 const search = async (name = "", { limit = 20, offset = 0 }) => {
-  console.log("search service by name", name);
   return Service.find({ name: { $regex: new RegExp(name, "i") } })
     .populate("company", "id name plan openDays startTime endTime", null, { populate: { path: "plan" } })
     .sort("-company plan value")

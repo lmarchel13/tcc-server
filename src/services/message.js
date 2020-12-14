@@ -28,26 +28,6 @@ const deleteMessage = async ({ userId, id }) => {
   return Message.findByIdAndDelete(id);
 };
 
-const getMessagesForUser = async ({ userId, companyId }) => {
-  const company = await Company.findById(companyId);
-  if (!company) throw NotFoundError("Empresa não encontrada");
-
-  const sentMessages = await Message.find({
-    sender: { _id: userId },
-    company: { _id: companyId },
-    direction: "from-user",
-  });
-  const receivedMessages = await Message.find({
-    sender: { _id: companyId },
-    company: { _id: companyId },
-    direction: "from-owner",
-  });
-
-  return [...sentMessages, ...receivedMessages].sort((a, b) => {
-    return a.createdAt > b.createdAt;
-  });
-};
-
 const getMessagesFromCompanies = async (ids) => {
   const obj = {};
   for (const id of ids) {
@@ -57,7 +37,6 @@ const getMessagesFromCompanies = async (ids) => {
       .populate("company")
       .populate("sender");
 
-    console.log(`Found ${messages.length} for companyId ${id}`);
     obj[id] = messages;
   }
 
@@ -67,6 +46,5 @@ const getMessagesFromCompanies = async (ids) => {
 module.exports = {
   createMessage,
   deleteMessage,
-  getMessagesForUser,
   getMessagesFromCompanies,
 };

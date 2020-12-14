@@ -7,7 +7,6 @@ const CategoryController = require("./category");
 const OfferController = require("./offer");
 const PlanController = require("./plan");
 const TransactionController = require("./transaction");
-const MessageController = require("./message");
 const ConversationController = require("./conversation");
 const ReportController = require("./report");
 
@@ -20,7 +19,6 @@ router.use("/categories", CategoryController);
 router.use("/offers", OfferController);
 router.use("/plans", PlanController);
 router.use("/transactions", TransactionController);
-router.use("/messages", MessageController);
 router.use("/conversations", ConversationController);
 router.use("/reports", ReportController);
 
