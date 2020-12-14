@@ -3,14 +3,7 @@ const supertest = require("supertest");
 const app = require("../app");
 const request = supertest(app);
 
-const {
-  clearDatabase,
-  createDefaultCategories,
-  createDefaultPlans,
-  createUser,
-  createCompany,
-  login,
-} = require("./helpers");
+const { clearDatabase, createDefaultCategories, createDefaultPlans, createUser, login } = require("./helpers");
 
 describe.only("Users test", () => {
   const baseUrl = "/users";
