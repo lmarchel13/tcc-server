@@ -6,7 +6,7 @@ require("dotenv").config({
 const DEFAULT_PAYMENT_METHODS = ["Dinheiro", "Cartão Débito", "Cartão Crédito"];
 
 module.exports = {
-  ENV_MODE: process.env.ENV_MODE || "dev",
+  ENV_MODE: process.env.NODE_ENV || "dev",
   PORT: process.env.PORT || 3000,
   DATABASE_URI: process.env.DATABASE_URI,
   JWT_PRIVATE_KEY: process.env.JWT_PRIVATE_KEY || "some-private-key",
