@@ -25,9 +25,9 @@
     "supertest": "^6.0.1"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "yarn seed && node index.js",
     "dev": "export NODE_ENV=dev && nodemon index.js",
-    "seed": "export NODE_ENV=dev && node seed/index.js",
+    "seed": "node seed/index.js",
     "test": "export NODE_ENV=test && jest --runInBand --watchAll --forceExit"
   }
 }
