@@ -41,4 +41,4 @@ eventHandler.on("NEW_MESSAGE_FROM_COMPANY", (payload) => {
 
 setInterval(() => {
   log.debug(`Connected users to WS: ${connections.size}`);
-}, 5000);
+}, 60000);
