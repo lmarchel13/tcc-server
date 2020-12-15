@@ -15,10 +15,10 @@
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
     "mongoose": "^5.10.15",
-    "socket.io": "^3.0.3"
+    "socket.io": "^3.0.3",
+    "faker": "^5.1.0"
   },
   "devDependencies": {
-    "faker": "^5.1.0",
     "jest": "^26.6.3",
     "nodemon": "^2.0.6",
     "prettier": "^2.1.2",
