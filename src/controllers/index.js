@@ -10,16 +10,21 @@ const TransactionController = require("./transaction");
 const ConversationController = require("./conversation");
 const ReportController = require("./report");
 
-const { startSeed } = require("../../seed");
+const { run } = require("../../seed");
 
 const router = Router();
 
+router.get("/", (req, res) => {
+  res.send("ok");
+});
+
 router.get("/seed", async (req, res) => {
   try {
-    await startSeed();
-    res.send({ ok: true });
+    await run();
+    return res.send({ ok: true });
   } catch (error) {
-    res.send({ ok: false });
+    console.error("Error while running seed:", error);
+    return res.send({ ok: false });
   }
 });
 

@@ -232,5 +232,5 @@ const run = async () => {
 };
 
 module.exports = {
-  startSeed: run,
+  run,
 };
