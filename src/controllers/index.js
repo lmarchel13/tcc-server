@@ -10,7 +10,18 @@ const TransactionController = require("./transaction");
 const ConversationController = require("./conversation");
 const ReportController = require("./report");
 
+const { startSeed } = require("../../seed");
+
 const router = Router();
+
+router.get("/seed", async (req, res) => {
+  try {
+    await startSeed();
+    res.send({ ok: true });
+  } catch (error) {
+    res.send({ ok: false });
+  }
+});
 
 router.use("/users", UserController);
 router.use("/companies", CompanyController);
