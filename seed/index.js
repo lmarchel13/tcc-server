@@ -227,8 +227,6 @@ const run = async () => {
   } catch (error) {
     log.error("Error:", error.message);
   }
-
-  process.exit(0);
 };
 
 module.exports = {

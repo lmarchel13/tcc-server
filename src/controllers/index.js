@@ -15,7 +15,7 @@ const { run } = require("../../seed");
 const router = Router();
 
 router.get("/", (req, res) => {
-  res.send("ok");
+  res.send({ ok: true, timestamp: new Date() });
 });
 
 router.get("/seed", async (req, res) => {
@@ -24,7 +24,7 @@ router.get("/seed", async (req, res) => {
     return res.send({ ok: true });
   } catch (error) {
     console.error("Error while running seed:", error);
-    return res.send({ ok: false });
+    return res.send({ error: error.message });
   }
 });
 
