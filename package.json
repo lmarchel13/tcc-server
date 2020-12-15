@@ -25,7 +25,7 @@
     "supertest": "^6.0.1"
   },
   "scripts": {
-    "start": "node index.js && npm run seed",
+    "start": "node index.js && node seed/index.js",
     "dev": "export NODE_ENV=dev && nodemon index.js",
     "seed": "node seed/index.js",
     "test": "export NODE_ENV=test && jest --runInBand --watchAll --forceExit"
