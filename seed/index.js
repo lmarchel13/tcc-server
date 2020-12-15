@@ -1,8 +1,8 @@
 const axios = require("axios");
 const faker = require("faker");
 
+const { PORT } = require("../src/config");
 const { logger } = require("../src/utils");
-
 const db = require("../src/database");
 const models = require("../src/models");
 
@@ -10,7 +10,7 @@ const CATEGORIES = require("./categories.json");
 const PLANS = require("./plans.json");
 const SERVICES_BY_CATEGORY = require("./services.json");
 
-const BASE_URL = "http://localhost:8000";
+const BASE_URL = `http://localhost:${PORT}`;
 const DEFAULT_PASSWORD = "123456";
 const NUMBER_OF_USERS = 50;
 const DAYS_OPEN = ["0", "1", "2", "3", "4", "5", "6"];
