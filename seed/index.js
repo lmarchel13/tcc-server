@@ -207,7 +207,7 @@ const startProcess = async (categories, plans) => {
   }
 };
 
-const run = async () => {
+const run = async (users = NUMBER_OF_USERS) => {
   await clearDatabase();
 
   const categories = await createCategories();
@@ -219,7 +219,7 @@ const run = async () => {
   try {
     console.time("PROCESS");
     await Promise.all(
-      new Array(NUMBER_OF_USERS).fill(0).map(async () => {
+      new Array(users).fill(0).map(async () => {
         return startProcess(categories, plans);
       }),
     );

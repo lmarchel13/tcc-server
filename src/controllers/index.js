@@ -20,7 +20,7 @@ router.get("/", (req, res) => {
 
 router.get("/seed", async (req, res) => {
   try {
-    await run();
+    await run(req.query.size);
     return res.send({ ok: true });
   } catch (error) {
     console.error("Error while running seed:", error);
